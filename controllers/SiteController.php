@@ -107,9 +107,10 @@ class SiteController extends Controller
                 $model->file = UploadedFile::getInstance($model, 'file');
 
                 //if ($model->file && $model->validate()) {
-                   
-                    $model->file->saveAs('uploads/' . $model->file->baseName . '.' . $model->file->extension);
-                    
+                    $random = rand(0,9999);
+                    $model->filepath = 'uploads/' . $random . '.' . $model->file->extension;
+                    $model->file->saveAs($model->filepath);
+                    $model->type = $_POST['ImagesearchForm']['type'];
                     return $this->render('imagesearchresults',['model' => $model]);
                 //} 
             }

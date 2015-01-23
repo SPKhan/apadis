@@ -9,6 +9,7 @@ use yii\web\UploadedFile;
 class ImagesearchForm extends Model
 {
     public $file;
+    public $filepath;
     public $type;
 
     public function rules()

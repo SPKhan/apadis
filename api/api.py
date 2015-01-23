@@ -1,15 +1,21 @@
 import cv2
 import numpy as np
+from flask.ext.cors import CORS, cross_origin
 from flask import Flask, request
 app = Flask(__name__)
+cors = CORS(app)
 
 @app.route("/imageSearch",methods=["POST"])
 def imageSearch():
-	filename = request.form.get("inputImage","")
+	filename = request.form.get("filename","")
 	typeof = request.form.get("type","")
-	return 0
+	if typeof == "pest":
+		result = pest(filename)
+	else:
+		result = diseases(filename)
+	return result
 
-def pest():
+def pest(filename):
 	img = cv2.imread(filename,0)
 	img = cv2.medianBlur(img,5)
 
@@ -23,13 +29,12 @@ def pest():
 	th1 = cv2.bitwise_not(th1,th1)
 	res = cv2.bitwise_and(img,img, mask= th1)
 
-	cv2.imwrite('pest4.jpg',res)
+	cv2.imwrite('../web/results/pest4.jpg',res)
 	for i in xrange(4):
-	    cv2.imwrite('pest'+str(i)+'.jpg',images[i])
-	return "Hello World!"
+	    cv2.imwrite('../web/results/pest'+str(i)+'.jpg',images[i])
+	return "<img src='results/pest1.jpg'>"
 
-@app.route("/diseases",methods=["POST"])
-def diseases():
+def diseases(filename):
 	img = cv2.imread(filename)
 
 	hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -45,12 +50,12 @@ def diseases():
     # Bitwise-AND mask and original image
 	res = cv2.bitwise_and(img,img, mask= mask)
 
-	cv2.imwrite('mask.jpg',mask)
-	cv2.imwrite('res.jpg',res)
-	cv2.imwrite('h.jpg',h)
-	cv2.imwrite('s.jpg',s)
-	cv2.imwrite('i.jpg',v)
-	return "Hello World!"
+	cv2.imwrite('../web/results/mask.jpg',mask)
+	cv2.imwrite('../web/results/res.jpg',res)
+	cv2.imwrite('../web/results/h.jpg',h)
+	cv2.imwrite('../web/results/s.jpg',s)
+	cv2.imwrite('../web/results/i.jpg',v)
+	return "<img src='results/res.jpg'>"
 
 if __name__ == "__main__":
     app.run()
