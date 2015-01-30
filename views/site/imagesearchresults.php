@@ -18,6 +18,7 @@ $this->registerJs('
 		success: function(result){
 			var result_container = $("#result-container");
 			result_container.html(result);
+			$(".jumbotron").fadeOut();
 		},
 		error: function(error){
 			var result_container = $("#result-container");
@@ -29,7 +30,12 @@ $this->registerJs('
 <div class="site-index">
 
     
-    <div id="result-container" class="body-content">
+    <div class="body-content">
+    	<div class="jumbotron">
+        <h2>Please wait while your image is being processed..</h2>
+        </div>
+        <div id="result-container">
 
+        </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 from flask.ext.cors import CORS, cross_origin
 from flask import Flask, request
 app = Flask(__name__)
@@ -26,13 +27,13 @@ def pest(filename):
 	            cv2.THRESH_BINARY,11,2)
 
 	images = [img, th1, th2, th3]
-	th1 = cv2.bitwise_not(th1,th1)
+	#th1 = cv2.bitwise_not(th1,th1)
 	res = cv2.bitwise_and(img,img, mask= th1)
-
-	cv2.imwrite('../web/results/pest4.jpg',res)
-	for i in xrange(4):
-	    cv2.imwrite('../web/results/pest'+str(i)+'.jpg',images[i])
-	return "<img src='results/pest1.jpg'>"
+	os.remove(filename)
+	cv2.imwrite('../web/results/res.jpg',res)
+	# for i in xrange(4):
+	#     cv2.imwrite('../web/results/pest'+str(i)+'.jpg',images[i])
+	return "<img src='results/res.jpg'>"
 
 def diseases(filename):
 	img = cv2.imread(filename)
@@ -50,6 +51,7 @@ def diseases(filename):
     # Bitwise-AND mask and original image
 	res = cv2.bitwise_and(img,img, mask= mask)
 
+	os.remove(filename)
 	cv2.imwrite('../web/results/mask.jpg',mask)
 	cv2.imwrite('../web/results/res.jpg',res)
 	cv2.imwrite('../web/results/h.jpg',h)
