@@ -4,15 +4,23 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use yii\web\UploadedFile;
 
 class SearchForm extends Model
 {
     public $search;
+    public $file;
+    public $filepath;
+    public $type;
 
     public function rules()
     {
         return [
-            ['search', 'required'],
+            [['search'], 'required'],
+            [['file'], 'file'],
+        	[['file'], 'file', 'extensions' => 'jpg, png, gif, jpeg', 'mimeTypes' => 'image/jpeg, image/png'],
+            [['file'], 'file', 'skipOnEmpty' => false],
+            [['type'], 'required']
         ];
     }
 }

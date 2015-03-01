@@ -53,6 +53,25 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $model = new SearchForm();
+
+        if (Yii::$app->request->isPost) {
+                $model->file = UploadedFile::getInstance($model, 'file');
+
+                //if ($model->file && $model->validate()) {
+                    if(!$model->file){
+
+                    }
+                    else{
+                        $random = rand(0,9999);
+                        $model->filepath = 'uploads/' . $random . '.' . $model->file->extension;
+                        $model->file->saveAs($model->filepath);
+                        $model->type = $_POST['SearchForm']['type'];
+                    }
+
+                    return $this->render('searchresults',['model' => $model]);
+                //} 
+        }
+
         return $this->render('index',['model' => $model]);
     }
 
@@ -98,23 +117,4 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
-
-    public function actionImagesearch()
-    {       
-            $model = new ImagesearchForm();
-
-            if (Yii::$app->request->isPost) {
-                $model->file = UploadedFile::getInstance($model, 'file');
-
-                //if ($model->file && $model->validate()) {
-                    $random = rand(0,9999);
-                    $model->filepath = 'uploads/' . $random . '.' . $model->file->extension;
-                    $model->file->saveAs($model->filepath);
-                    $model->type = $_POST['ImagesearchForm']['type'];
-                    return $this->render('imagesearchresults',['model' => $model]);
-                //} 
-            }
-
-            return $this->render('imagesearch',['model' => $model]);
-    }
 }

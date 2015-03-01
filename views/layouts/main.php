@@ -26,10 +26,10 @@ AppAsset::register($this);
     <div class="wrap">
         <?php
             NavBar::begin([
-                'brandLabel' => 'Pest and Diseases Search Engine',
-                'brandUrl' => Yii::$app->homeUrl,
+                //'brandLabel' => 'Pest and Diseases Identification System',
+                //'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
-                    'class' => 'navbar-inverse navbar-fixed-top',
+                    'class' => 'navbar-static-top',
                 ],
             ]);
             echo Nav::widget([
@@ -58,7 +58,7 @@ AppAsset::register($this);
 
     <footer class="footer">
         <div class="container">
-            <p class="pull-left">&copy; Pest and Diseases Search Engine <?= date('Y') ?></p>
+            <p class="pull-left">&copy; Pest and Diseases Identification System <?= date('Y') ?></p>
         </div>
     </footer>
 
