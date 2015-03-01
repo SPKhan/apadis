@@ -4,6 +4,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use yii\helpers\BaseUrl;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -18,6 +19,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <link rel="shortcut icon" href="<?php echo BaseUrl::base(); ?>/favicon.ico" type="image/x-icon" />
     <?php $this->head() ?>
 </head>
 <body>
