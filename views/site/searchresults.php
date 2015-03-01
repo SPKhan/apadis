@@ -20,6 +20,7 @@ $this->registerJs('
 	$(".wrap > .container").attr("style","padding:0px 15px 20px !important;");
 });',View::POS_END, 'my-options');
 if($model->file){
+$this->registerCssFile(BaseUrl::base().'/css/jquery.jqplot.css');
 $this->registerJsFile(BaseUrl::base().'/js/jquery.jqplot.min.js',['depends' => [yii\web\JqueryAsset::className()]]);
 $this->registerJs('
 	$("document").ready(function() {

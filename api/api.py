@@ -58,21 +58,21 @@ def diseases(filename):
 	h,s,v = cv2.split(hsv)
 	b,g,r = cv2.split(bgr)
 
-	red_location = '../web/results/' + name + '-red.jpg'
-	blue_location = '../web/results/' + name + '-blue.jpg'
-	green_location = '../web/results/' + name + '-green.jpg'
+	red_location = '../web/results/red.jpg'
+	blue_location = '../web/results/blue.jpg'
+	green_location = '../web/results/green.jpg'
 
-	redmasked_location = '../web/results/' + name + '-red-masked.jpg'
-	bluemasked_location = '../web/results/' + name + '-blue-masked.jpg'
-	greenmasked_location = '../web/results/' + name + '-green-masked.jpg'
+	redmasked_location = '../web/results/red-masked.jpg'
+	bluemasked_location = '../web/results/blue-masked.jpg'
+	greenmasked_location = '../web/results/green-masked.jpg'
 
-	hue_location = '../web/results/' + name + '-hue.jpg'
-	sat_location = '../web/results/' + name + '-sat.jpg'
-	val_location = '../web/results/' + name + '-val.jpg'
-	mask_location = '../web/results/' + name + '-mask.jpg'
-	result_location = '../web/results/' + name + '-result.jpg'
+	hue_location = '../web/results/hue.jpg'
+	sat_location = '../web/results/sat.jpg'
+	val_location = '../web/results/val.jpg'
+	mask_location = '../web/results/mask.jpg'
+	result_location = '../web/results/result.jpg'
 
-	th_location = '../web/results/' + name + '-th.jpg'
+	th_location = '../web/results/th.jpg'
 
 
 	mask = cv2.inRange(h, 40, 80)

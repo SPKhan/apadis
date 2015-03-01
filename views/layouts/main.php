@@ -58,7 +58,7 @@ AppAsset::register($this);
 
     <footer class="footer">
         <div class="container">
-            <p class="pull-left">&copy; Pest and Diseases Identification System <?= date('Y') ?></p>
+            <p class="pull-left">&copy; Adaptive Pest and Diseases Identification System <?= date('Y') ?></p>
         </div>
     </footer>
 
