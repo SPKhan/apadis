@@ -17,6 +17,22 @@ $this->registerJs('
 	        $("#image-search-form").hide();
 	        $("#text-search-form").show();   
 		});
+		$("#submit-pest").click(function(){
+	        $("input[name=\'SearchForm[type]\'][value=\'pest\']").prop("checked",true);
+	        $("#text-search-form").submit();
+	    });
+	    $("#submit-disease").click(function(){
+	        $("input[name=\'SearchForm[type]\'][value=\'disease\']").prop("checked",true);
+	        $("#text-search-form").submit();
+	    });
+	    $("#submit-pest-image").click(function(){
+	        $("input[name=\'SearchForm[type]\'][value=\'pest\']").prop("checked",true);
+	        $("#image-search-form").submit();
+	    });
+	    $("#submit-disease-image").click(function(){
+	        $("input[name=\'SearchForm[type]\'][value=\'disease\']").prop("checked",true);
+	        $("#image-search-form").submit();
+	    });
 	$(".wrap > .container").attr("style","padding:0px 15px 20px !important;");
 });',View::POS_END, 'my-options');
 if($model->file){
@@ -33,6 +49,22 @@ $this->registerJs('
 	        $("#image-search-form").hide();
 	        $("#text-search-form").show();   
 		});
+		$("#submit-pest").click(function(){
+	        $("input[name=\'SearchForm[type]\'][value=\'pest\']").prop("checked",true);
+	        $("#text-search-form").submit();
+	    });
+	    $("#submit-disease").click(function(){
+	        $("input[name=\'SearchForm[type]\'][value=\'disease\']").prop("checked",true);
+	        $("#text-search-form").submit();
+	    });
+	    $("#submit-pest-image").click(function(){
+	        $("input[name=\'SearchForm[type]\'][value=\'pest\']").prop("checked",true);
+	        $("#image-search-form").submit();
+	    });
+	    $("#submit-disease-image").click(function(){
+	        $("input[name=\'SearchForm[type]\'][value=\'disease\']").prop("checked",true);
+	        $("#image-search-form").submit();
+	    });
 		$(".wrap > .container").attr("style","padding:0px 15px 20px !important;");
 	$.ajax({
 		type:"POST",
@@ -64,24 +96,33 @@ $this->registerJs('
 
 ?>
 <div class="site-index">
+		<div class="row">
+		<img src="<?php echo BaseUrl::base(); ?>/logo.png" class="col-md-2" width="300px" height="50px"/>
 		<?php $form = ActiveForm::begin(['options' =>['id'=>'text-search-form','class'=>'form-inline']]); ?>
-                <?= $form->field($model, 'search')->textInput(["style"=>"width:700px !important;"]) ?>
+            <div class="form-group">
+                <?= $form->field($model, 'search')->textInput(["style"=>"width:300px !important;"]) ?>
                 <button id="show-image-form" type="button" class="btn btn-default btn-sm" style="padding: 5px 24px !important;">
                   <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
                 </button>
-                <?= Html::submitButton('<span class="glyphicon glyphicon-search" aria-hidden="true"></span>', ['class' => 'btn btn-sm btn-primary','style'=>'padding: 5px 24px !important;']) ?>
+
+                <?= $form->field($model,'type')->radioList(["pest"=>"Pest","disease"=>"Disease"],['hidden'=>'hidden']); ?>
+            </div>
+            <?= Html::button('Pests', ['id'=>'submit-pest','class' => 'btn btn-sm btn-default','style'=>'padding: 5px 24px !important;']) ?>
+
+            <?= Html::button('Diseases', ['id'=>'submit-disease','class' => 'btn btn-sm btn-default','style'=>'padding: 5px 24px !important;']) ?>
         <?php ActiveForm::end(); ?>
 
-        <?php $form = ActiveForm::begin(['options' => ['id'=>'image-search-form','class'=>'form-inline','enctype' => 'multipart/form-data'] ]);?>
-                <?= $form->field($model, 'file')->fileInput(["onchange"=>"readURL(this);","style"=>"width:575px !important;"]); ?>
-                <?= $form->field($model,'type')->radioList(["pest"=>"Pest","disease"=>"Disease"]); ?>
+        <?php $form = ActiveForm::begin(['options' => ['hidden'=>'hidden','id'=>'image-search-form','class'=>'form-inline','enctype' => 'multipart/form-data'] ]);?>
+                <?= $form->field($model, 'file')->fileInput(["style"=>"width:300px !important;","class"=>"form-control"]); ?>
                 <button id="show-text-form" type="button" class="btn btn-default btn-sm" style="padding: 5px 24px !important;">
                   <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                 </button>
-                <?= Html::submitButton('<span class="glyphicon glyphicon-search" aria-hidden="true"></span>', ['class' => 'btn btn-sm btn-primary','style'=>'padding: 5px 24px !important;']) ?>
+                <?= $form->field($model,'type')->radioList(["pest"=>"Pest","disease"=>"Disease"],['hidden'=>'hidden']); ?>
+                <?= Html::button('Pests', ['id'=>'submit-pest-image','class' => 'btn btn-sm btn-default','style'=>'padding: 5px 24px !important;']) ?>
+
+                <?= Html::button('Diseases', ['id'=>'submit-disease-image','class' => 'btn btn-sm btn-default','style'=>'padding: 5px 24px !important;']) ?>
         <?php ActiveForm::end(); ?>
-        <img id="preview" src="" />
-    
+    	</div>
     <div class="body-content">
     	<?php if($model->file){ ?>
     	<div class="jumbotron">

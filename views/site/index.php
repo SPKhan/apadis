@@ -17,6 +17,23 @@ $('document').ready(function(){
         $('#image-search-form').hide();
         $('#text-search-form').show();   
     });
+    $('#submit-pest').click(function(){
+        $('input[name=\"SearchForm[type]\"][value=\"pest\"]').prop('checked',true);
+        $('#text-search-form').submit();
+    });
+    $('#submit-disease').click(function(){
+        $('input[name=\"SearchForm[type]\"][value=\"disease\"]').prop('checked',true);
+        $('#text-search-form').submit();
+    });
+    $('#submit-pest-image').click(function(){
+        $('input[name=\"SearchForm[type]\"][value=\"pest\"]').prop('checked',true);
+        $('#image-search-form').submit();
+    });
+    $('#submit-disease-image').click(function(){
+        $('input[name=\"SearchForm[type]\"][value=\"disease\"]').prop('checked',true);
+        $('#image-search-form').submit();
+    });
+    
 });
 function readURL(input) {
       if (input.files && input.files[0]) {
@@ -29,32 +46,45 @@ function readURL(input) {
         };
         reader.readAsDataURL(input.files[0]);
       }
-    }",View::POS_END, 'my-options'
+    }
+",View::POS_END, 'my-options'
 );
 ?>
 <div class="site-index">
 
-    <div class="jumbotron">
-        <h1>APADIS</h1>
+    <div class="jumbotron" style="padding-top:0px!important;">
+        <img src="<?php echo BaseUrl::base(); ?>/logo.png" width="700px" height="200px"/>
 
         <?php $form = ActiveForm::begin(['options' =>['id'=>'text-search-form','class'=>'form-inline']]); ?>
+            <div class="form-group">
                 <?= $form->field($model, 'search')->textInput(["style"=>"width:700px !important;"]) ?>
                 <button id="show-image-form" type="button" class="btn btn-default btn-sm" style="padding: 5px 24px !important;">
                   <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
                 </button>
-                <?= Html::submitButton('<span class="glyphicon glyphicon-search" aria-hidden="true"></span>', ['class' => 'btn btn-sm btn-primary','style'=>'padding: 5px 24px !important;']) ?>
+
+                <?= $form->field($model,'type')->radioList(["pest"=>"Pest","disease"=>"Disease"],['hidden'=>'hidden']); ?>
+            </div>
+            <br/>
+            <?= Html::button('Pests', ['id'=>'submit-pest','class' => 'btn btn-sm btn-default','style'=>'padding: 5px 24px !important;']) ?>
+
+            <?= Html::button('Diseases', ['id'=>'submit-disease','class' => 'btn btn-sm btn-default','style'=>'padding: 5px 24px !important;']) ?>
         <?php ActiveForm::end(); ?>
 
-        <?php $form = ActiveForm::begin(['options' => ['id'=>'image-search-form','class'=>'form-inline','enctype' => 'multipart/form-data'] ]);?>
-                <?= $form->field($model, 'file')->fileInput(["onchange"=>"readURL(this);","style"=>"width:575px !important;"]); ?>
-                <?= $form->field($model,'type')->radioList(["pest"=>"Pest","disease"=>"Disease"]); ?>
+        <?php $form = ActiveForm::begin(['options' => ['hidden'=>'hidden','id'=>'image-search-form','class'=>'form-inline','enctype' => 'multipart/form-data'] ]);?>
+                <?= $form->field($model, 'file')->fileInput(["onchange"=>"readURL(this);","style"=>"width:700px !important;","class"=>"form-control"]); ?>
                 <button id="show-text-form" type="button" class="btn btn-default btn-sm" style="padding: 5px 24px !important;">
                   <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                 </button>
-                <?= Html::submitButton('<span class="glyphicon glyphicon-search" aria-hidden="true"></span>', ['class' => 'btn btn-sm btn-primary','style'=>'padding: 5px 24px !important;']) ?>
+                <?= $form->field($model,'type')->radioList(["pest"=>"Pest","disease"=>"Disease"],['hidden'=>'hidden']); ?>
+                <br/>
+                <?= Html::button('Pests', ['id'=>'submit-pest-image','class' => 'btn btn-sm btn-default','style'=>'padding: 5px 24px !important;']) ?>
+
+                <?= Html::button('Diseases', ['id'=>'submit-disease-image','class' => 'btn btn-sm btn-default','style'=>'padding: 5px 24px !important;']) ?>
         <?php ActiveForm::end(); ?>
+        <br/><br/>
         <img id="preview" src="" />
     </div>
+    
 
     <div class="body-content">
 

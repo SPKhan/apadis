@@ -16,11 +16,11 @@ class SearchForm extends Model
     public function rules()
     {
         return [
-            [['search'], 'required'],
+            [['search'], 'required','message'=>''],
             [['file'], 'file'],
         	[['file'], 'file', 'extensions' => 'jpg, png, gif, jpeg', 'mimeTypes' => 'image/jpeg, image/png'],
             [['file'], 'file', 'skipOnEmpty' => false],
-            [['type'], 'required']
+            [['type'], 'required','message'=>'']
         ];
     }
 }

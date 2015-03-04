@@ -65,8 +65,9 @@ class SiteController extends Controller
                         $random = rand(0,9999);
                         $model->filepath = 'uploads/' . $random . '.' . $model->file->extension;
                         $model->file->saveAs($model->filepath);
-                        $model->type = $_POST['SearchForm']['type'];
                     }
+
+                    $model->type = $_POST['SearchForm']['type'];
 
                     return $this->render('searchresults',['model' => $model]);
                 //} 
