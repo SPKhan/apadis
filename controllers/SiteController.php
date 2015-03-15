@@ -56,10 +56,23 @@ class SiteController extends Controller
 
         if (Yii::$app->request->isPost) {
                 $model->file = UploadedFile::getInstance($model, 'file');
-
+                $post;
+                $this->layout='results';
                 //if ($model->file && $model->validate()) {
                     if(!$model->file){
+                        $query = $_POST['SearchForm']['search'];
+                        $connection = new \yii\db\Connection([
+                            'dsn' => 'mysql:host=127.0.0.1;dbname=spsarai',
+                            'username' => 'root',
+                            'password' => '',
+                        ]);
+                        $connection->open();
 
+                        $command = $connection->createCommand('SELECT * FROM com_name WHERE com_name like "%Lorem%"');
+                        $command->bindValue(':id', $_POST['SearchForm']['search']);
+                        $post = $command->queryAll();
+
+                        $connection->close();
                     }
                     else{
                         $random = rand(0,9999);
@@ -69,7 +82,7 @@ class SiteController extends Controller
 
                     $model->type = $_POST['SearchForm']['type'];
 
-                    return $this->render('searchresults',['model' => $model]);
+                    return $this->render('searchresults',['model' => $model,'result' => $post]);
                 //} 
         }
 

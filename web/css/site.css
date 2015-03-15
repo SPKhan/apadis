@@ -97,4 +97,47 @@ a.desc:after {
 .control-label{
     display: none;
 }
+/*-----------------------------------*/
+.image-module{
+
+    display: none;
+
+}
+
+.input-container{
+
+    border: solid 1px #dddddd;
+
+}
+
+.button-close{
+    text-align: right;
+}
+
+.imagesearch-upper{
+    border: solid 1px #dddddd;
+}
+
+p.imagesearch-head{
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+}
+p.imagesearch-desc{
+    text-align: left;
+    font-size: 14px;
+}
+
+.caption{
+    display: none;
+}
+
+.list-format{
+    display: none;
+}
+
+.media-object{
+    width: 300px;
+    height: 200px;
+}
 

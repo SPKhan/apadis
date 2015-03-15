@@ -6,66 +6,14 @@ use yii\widgets\ActiveForm;
 use yii\web\View;
 /* @var $this yii\web\View */
 $this->title = 'Pest and Diseases Search Results';
-$this->registerJs('
-	$("document").ready(function() {
-		$("#image-search-form").hide();
-	    $("#show-image-form").click(function(){
-	        $("#image-search-form").show();
-	        $("#text-search-form").hide();   
-	    });
-	    $("#show-text-form").click(function(){
-	        $("#image-search-form").hide();
-	        $("#text-search-form").show();   
-		});
-		$("#submit-pest").click(function(){
-	        $("input[name=\'SearchForm[type]\'][value=\'pest\']").prop("checked",true);
-	        $("#text-search-form").submit();
-	    });
-	    $("#submit-disease").click(function(){
-	        $("input[name=\'SearchForm[type]\'][value=\'disease\']").prop("checked",true);
-	        $("#text-search-form").submit();
-	    });
-	    $("#submit-pest-image").click(function(){
-	        $("input[name=\'SearchForm[type]\'][value=\'pest\']").prop("checked",true);
-	        $("#image-search-form").submit();
-	    });
-	    $("#submit-disease-image").click(function(){
-	        $("input[name=\'SearchForm[type]\'][value=\'disease\']").prop("checked",true);
-	        $("#image-search-form").submit();
-	    });
-	$(".wrap > .container").attr("style","padding:0px 15px 20px !important;");
-});',View::POS_END, 'my-options');
+$this->registerJs('$(".wrap > .container").attr("style","padding:0px 15px 20px !important;");',View::POS_END, 'my-options');
+$this->registerJsFile(BaseUrl::base().'/js/main.js',['depends' => [yii\web\JqueryAsset::className()]]);
 if($model->file){
 $this->registerCssFile(BaseUrl::base().'/css/jquery.jqplot.css');
 $this->registerJsFile(BaseUrl::base().'/js/jquery.jqplot.min.js',['depends' => [yii\web\JqueryAsset::className()]]);
 $this->registerJs('
 	$("document").ready(function() {
-		$("#image-search-form").hide();
-	    $("#show-image-form").click(function(){
-	        $("#image-search-form").show();
-	        $("#text-search-form").hide();   
-	    });
-	    $("#show-text-form").click(function(){
-	        $("#image-search-form").hide();
-	        $("#text-search-form").show();   
-		});
-		$("#submit-pest").click(function(){
-	        $("input[name=\'SearchForm[type]\'][value=\'pest\']").prop("checked",true);
-	        $("#text-search-form").submit();
-	    });
-	    $("#submit-disease").click(function(){
-	        $("input[name=\'SearchForm[type]\'][value=\'disease\']").prop("checked",true);
-	        $("#text-search-form").submit();
-	    });
-	    $("#submit-pest-image").click(function(){
-	        $("input[name=\'SearchForm[type]\'][value=\'pest\']").prop("checked",true);
-	        $("#image-search-form").submit();
-	    });
-	    $("#submit-disease-image").click(function(){
-	        $("input[name=\'SearchForm[type]\'][value=\'disease\']").prop("checked",true);
-	        $("#image-search-form").submit();
-	    });
-		$(".wrap > .container").attr("style","padding:0px 15px 20px !important;");
+	$(".wrap > .container").attr("style","padding:0px 15px 20px !important;");
 	$.ajax({
 		type:"POST",
 		url:"http://127.0.0.1:5000/imageSearch",
@@ -97,10 +45,9 @@ $this->registerJs('
 ?>
 <div class="site-index">
 		<div class="row">
-		<img src="<?php echo BaseUrl::base(); ?>/logo.png" class="col-md-2" width="300px" height="50px"/>
 		<?php $form = ActiveForm::begin(['options' =>['id'=>'text-search-form','class'=>'form-inline']]); ?>
             <div class="form-group">
-                <?= $form->field($model, 'search')->textInput(["style"=>"width:300px !important;"]) ?>
+                <?= $form->field($model, 'search')->textInput(["style"=>"width:700px !important;"]) ?>
                 <button id="show-image-form" type="button" class="btn btn-default btn-sm" style="padding: 5px 24px !important;">
                   <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
                 </button>
@@ -113,16 +60,33 @@ $this->registerJs('
         <?php ActiveForm::end(); ?>
 
         <?php $form = ActiveForm::begin(['options' => ['hidden'=>'hidden','id'=>'image-search-form','class'=>'form-inline','enctype' => 'multipart/form-data'] ]);?>
-                <?= $form->field($model, 'file')->fileInput(["style"=>"width:300px !important;","class"=>"form-control"]); ?>
-                <button id="show-text-form" type="button" class="btn btn-default btn-sm" style="padding: 5px 24px !important;">
-                  <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                </button>
+                <div class='input-container row' style="width:700px;margin-left:10px;">
+
+                        <div class='imagesearch-upper'>
+
+                            <div class='button-close'>
+                                <span id="show-text-form" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </div>
+
+                            <p class='imagesearch-head' >Search by Image</p>
+                            <p class='imagesearch-desc'>Search APADIS with an image instead of text.</p>
+                        
+                        </div>
+
+                            <?= $form->field($model, 'file')->fileInput(["onchange"=>"readURL(this);","style"=>"width:900px !important;"]); ?>
+                </div>
                 <?= $form->field($model,'type')->radioList(["pest"=>"Pest","disease"=>"Disease"],['hidden'=>'hidden']); ?>
+                <br/>
+                <div style="margin-left:10px;">
                 <?= Html::button('Pests', ['id'=>'submit-pest-image','class' => 'btn btn-sm btn-default','style'=>'padding: 5px 24px !important;']) ?>
 
                 <?= Html::button('Diseases', ['id'=>'submit-disease-image','class' => 'btn btn-sm btn-default','style'=>'padding: 5px 24px !important;']) ?>
+            	</div>
         <?php ActiveForm::end(); ?>
     	</div>
+    <br/>
+    <img id="preview" src="" />
+    <br/><br/>
     <div class="body-content">
     	<?php if($model->file){ ?>
     	<div class="jumbotron">
@@ -130,7 +94,211 @@ $this->registerJs('
         </div>
         <?php }?>
         <div id="result-container">
+        <?php if(!$model->file){ ?>
+    		<div class="btn-group" role="group" aria-label="...">
+	                <button type="button" class="th-btn btn btn-primary">
+	                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+	                </button>
+	                <button type="button" class="list-btn btn btn-default">
+	                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+	                </button>
+	        </div>
+	    	
+	        <br/>
+	        <br/>
+	        <div class="thumbnail-format row">
 
+
+	          <div class="col-xs-6 col-md-4">
+	            <div class="thumbnail entry entry-1">
+	              <img src="uploads/1672.png" />
+	            </div>
+	            <div class="caption caption-1">
+	                <h3>Lorem Ipsum</h3>
+	                <p>Scientific Name: Lorem Ipsum</p>
+	                <p>Filipino Name: Lorem Ipsum</p>
+	                <button type="button" class="btn btn-primary">
+	                    Read More
+	                </button>
+	                <button type="button" class="btn btn-default caption-close-btn">
+	                    Close
+	                </button>
+	            </div>
+	          </div>
+	          <div class="col-xs-6 col-md-4">
+	            <div href="#" class="thumbnail entry entry-2">
+	              <img src="uploads/6521.png" />
+	            </div>
+	            <div class="caption caption-2">
+	                <h3>Lorem Ipsum</h3>
+	                <p>Scientific Name: Lorem Ipsum</p>
+	                <p>Filipino Name: Lorem Ipsum</p>
+	                <button type="button" class="btn btn-primary">
+	                    Read More
+	                </button>
+	                <button type="button" class="btn btn-default caption-close-btn">
+	                    Close
+	                </button>
+	            </div>
+	          </div>
+	          <div class="col-xs-6 col-md-4">
+	            <div href="#" class="thumbnail entry entry-3">
+	              <img src="uploads/8572.jpg" />
+	            </div>
+	            <div class="caption caption-3">
+	                <h3>Lorem Ipsum</h3>
+	                <p>Scientific Name: Lorem Ipsum</p>
+	                <p>Filipino Name: Lorem Ipsum</p>
+	                <button type="button" class="btn btn-primary">
+	                    Read More
+	                </button>
+	                <button type="button" class="btn btn-default caption-close-btn">
+	                    Close
+	                </button>
+	            </div>
+	          </div>
+
+	          <div class="col-xs-6 col-md-4">
+	            <div href="#" class="thumbnail entry entry-4">
+	              <img src="uploads/1672.png" />
+	            </div>
+	            <div class="caption caption-4">
+	                <h3>Lorem Ipsum</h3>
+	                <p>Scientific Name: Lorem Ipsum</p>
+	                <p>Filipino Name: Lorem Ipsum</p>
+	                <button type="button" class="btn btn-primary">
+	                    Read More
+	                </button>
+	                <button type="button" class="btn btn-default caption-close-btn">
+	                    Close
+	                </button>
+	            </div>
+	          </div>
+	          <div class="col-xs-6 col-md-4">
+	            <div href="#" class="thumbnail entry entry-5">
+	              <img src="uploads/1672.png" />
+	            </div>
+	            <div class="caption caption-5">
+	                <h3>Lorem Ipsum</h3>
+	                <p>Scientific Name: Lorem Ipsum</p>
+	                <p>Filipino Name: Lorem Ipsum</p>
+	                <button type="button" class="btn btn-primary">
+	                    Read More
+	                </button>
+	                <button type="button" class="btn btn-default caption-close-btn">
+	                    Close
+	                </button>
+	            </div>
+	          </div>
+	          <div class="col-xs-6 col-md-4">
+	            <div href="#" class="thumbnail entry entry-6">
+	              <img src="uploads/1672.png" />
+	            </div>
+	            <div class="caption caption-6">
+	                <h3>Lorem Ipsum</h3>
+	                <p>Scientific Name: Lorem Ipsum</p>
+	                <p>Filipino Name: Lorem Ipsum</p>
+	                <button type="button" class="btn btn-primary">
+	                    Read More
+	                </button>
+	                <button type="button" class="btn btn-default caption-close-btn">
+	                    Close
+	                </button>
+	            </div>
+	          </div>
+
+
+
+	        </div>
+
+
+	        <div class='list-format'>
+	            <div class="media">
+	              <div class="media-left media-middle">
+	                <a href="#">
+	                  <img class='media-object' src="uploads/1672.png" />
+	                </a>
+	              </div>
+	              <div class="media-body">
+	                <a><h4 class="media-heading">Lorem Ipsum</h4></a>
+	                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan lectus quis condimentum molestie. Aliquam vel orci ac orci tristique fringilla. Aliquam nec venenatis arcu, nec vulputate arcu. Nulla facilisi. Morbi eget quam vitae augue ornare porttitor. Curabitur pretium nibh sed mi ornare faucibus. Nunc eros ipsum, laoreet sed dui et, rhoncus dictum erat. Quisque blandit leo vel ligula suscipit aliquet in eu nibh. In sit amet sapien odio. Duis a elit id velit rutrum suscipit et et turpis. Mauris sagittis malesuada ex, ac aliquet dolor porttitor et. Vestibulum sit amet eros maximus, posuere lacus nec, posuere lectus. Mauris nec nunc eu lacus efficitur suscipit vitae non nulla. Cras a diam felis. 
+	              </div>
+	            </div>
+
+	            <hr/>
+
+	            <div class="media">
+	              <div class="media-left media-middle">
+	                <a href="#">
+	                  <img class='media-object' src="uploads/1672.png" />
+	                </a>
+	              </div>
+	              <div class="media-body">
+	                <a><h4 class="media-heading">Lorem Ipsum</h4></a>
+	                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan lectus quis condimentum molestie. Aliquam vel orci ac orci tristique fringilla. Aliquam nec venenatis arcu, nec vulputate arcu. Nulla facilisi. Morbi eget quam vitae augue ornare porttitor. Curabitur pretium nibh sed mi ornare faucibus. Nunc eros ipsum, laoreet sed dui et, rhoncus dictum erat. Quisque blandit leo vel ligula suscipit aliquet in eu nibh. In sit amet sapien odio. Duis a elit id velit rutrum suscipit et et turpis. Mauris sagittis malesuada ex, ac aliquet dolor porttitor et. Vestibulum sit amet eros maximus, posuere lacus nec, posuere lectus. Mauris nec nunc eu lacus efficitur suscipit vitae non nulla. Cras a diam felis. 
+	              </div>
+	            </div>
+
+	            <hr/>
+
+	            <div class="media">
+	              <div class="media-left media-middle">
+	                <a href="#">
+	                  <img class='media-object' src="uploads/1672.png" />
+	                </a>
+	              </div>
+	              <div class="media-body">
+	                <a><h4 class="media-heading">Lorem Ipsum</h4></a>
+	                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan lectus quis condimentum molestie. Aliquam vel orci ac orci tristique fringilla. Aliquam nec venenatis arcu, nec vulputate arcu. Nulla facilisi. Morbi eget quam vitae augue ornare porttitor. Curabitur pretium nibh sed mi ornare faucibus. Nunc eros ipsum, laoreet sed dui et, rhoncus dictum erat. Quisque blandit leo vel ligula suscipit aliquet in eu nibh. In sit amet sapien odio. Duis a elit id velit rutrum suscipit et et turpis. Mauris sagittis malesuada ex, ac aliquet dolor porttitor et. Vestibulum sit amet eros maximus, posuere lacus nec, posuere lectus. Mauris nec nunc eu lacus efficitur suscipit vitae non nulla. Cras a diam felis. 
+	              </div>
+	            </div>
+
+	            <hr/>
+
+	            <div class="media">
+	              <div class="media-left media-middle">
+	                <a href="#">
+	                  <img class='media-object' src="uploads/1672.png" />
+	                </a>
+	              </div>
+	              <div class="media-body">
+	                <a><h4 class="media-heading">Lorem Ipsum</h4></a>
+	                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan lectus quis condimentum molestie. Aliquam vel orci ac orci tristique fringilla. Aliquam nec venenatis arcu, nec vulputate arcu. Nulla facilisi. Morbi eget quam vitae augue ornare porttitor. Curabitur pretium nibh sed mi ornare faucibus. Nunc eros ipsum, laoreet sed dui et, rhoncus dictum erat. Quisque blandit leo vel ligula suscipit aliquet in eu nibh. In sit amet sapien odio. Duis a elit id velit rutrum suscipit et et turpis. Mauris sagittis malesuada ex, ac aliquet dolor porttitor et. Vestibulum sit amet eros maximus, posuere lacus nec, posuere lectus. Mauris nec nunc eu lacus efficitur suscipit vitae non nulla. Cras a diam felis. 
+	              </div>
+	            </div>
+
+	            <hr/>
+
+	            <div class="media">
+	              <div class="media-left media-middle">
+	                <a href="#">
+	                  <img class='media-object' src="uploads/1672.png" />
+	                </a>
+	              </div>
+	              <div class="media-body">
+	                <a><h4 class="media-heading">Lorem Ipsum</h4></a>
+	                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan lectus quis condimentum molestie. Aliquam vel orci ac orci tristique fringilla. Aliquam nec venenatis arcu, nec vulputate arcu. Nulla facilisi. Morbi eget quam vitae augue ornare porttitor. Curabitur pretium nibh sed mi ornare faucibus. Nunc eros ipsum, laoreet sed dui et, rhoncus dictum erat. Quisque blandit leo vel ligula suscipit aliquet in eu nibh. In sit amet sapien odio. Duis a elit id velit rutrum suscipit et et turpis. Mauris sagittis malesuada ex, ac aliquet dolor porttitor et. Vestibulum sit amet eros maximus, posuere lacus nec, posuere lectus. Mauris nec nunc eu lacus efficitur suscipit vitae non nulla. Cras a diam felis. 
+	              </div>
+	            </div>
+
+	            <hr/>
+
+	            <div class="media">
+	              <div class="media-left media-middle">
+	                <a href="#">
+	                  <img class='media-object' src="uploads/1672.png" />
+	                </a>
+	              </div>
+	              <div class="media-body">
+	                <a><h4 class="media-heading">Lorem Ipsum</h4></a>
+	                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan lectus quis condimentum molestie. Aliquam vel orci ac orci tristique fringilla. Aliquam nec venenatis arcu, nec vulputate arcu. Nulla facilisi. Morbi eget quam vitae augue ornare porttitor. Curabitur pretium nibh sed mi ornare faucibus. Nunc eros ipsum, laoreet sed dui et, rhoncus dictum erat. Quisque blandit leo vel ligula suscipit aliquet in eu nibh. In sit amet sapien odio. Duis a elit id velit rutrum suscipit et et turpis. Mauris sagittis malesuada ex, ac aliquet dolor porttitor et. Vestibulum sit amet eros maximus, posuere lacus nec, posuere lectus. Mauris nec nunc eu lacus efficitur suscipit vitae non nulla. Cras a diam felis. 
+	              </div>
+	            </div>
+
+	            <hr/>
+	            
+	        </div>
+        <?php }?>
         </div>
     </div>
 </div>

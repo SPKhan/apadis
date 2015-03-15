@@ -18,6 +18,7 @@ class SearchForm extends Model
         return [
             [['search'], 'required','message'=>''],
             [['file'], 'file'],
+            [['file'], 'required','message'=>''],
         	[['file'], 'file', 'extensions' => 'jpg, png, gif, jpeg', 'mimeTypes' => 'image/jpeg, image/png'],
             [['file'], 'file', 'skipOnEmpty' => false],
             [['type'], 'required','message'=>'']
