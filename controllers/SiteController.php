@@ -56,34 +56,34 @@ class SiteController extends Controller
 
         if (Yii::$app->request->isPost) {
                 $model->file = UploadedFile::getInstance($model, 'file');
-                $post;
                 $this->layout='results';
-                //if ($model->file && $model->validate()) {
+                $model->type = $_POST['SearchForm']['type'];
                     if(!$model->file){
                         $query = $_POST['SearchForm']['search'];
-                        $connection = new \yii\db\Connection([
-                            'dsn' => 'mysql:host=127.0.0.1;dbname=spsarai',
-                            'username' => 'root',
-                            'password' => '',
-                        ]);
-                        $connection->open();
+                        //search module here
 
-                        $command = $connection->createCommand('SELECT * FROM com_name WHERE com_name like "%Lorem%"');
-                        $command->bindValue(':id', $_POST['SearchForm']['search']);
-                        $post = $command->queryAll();
+                        // $connection = new \yii\db\Connection([
+                        //     'dsn' => 'mysql:host=127.0.0.1;dbname=spsarai',
+                        //     'username' => 'root',
+                        //     'password' => '',
+                        // ]);
+                        // $connection->open();
 
-                        $connection->close();
+                        // $command = $connection->createCommand('SELECT * FROM plant_problem WHERE sci_name like "%Lorem%"');
+                        // $command->bindValue(':id', $_POST['SearchForm']['search']);
+                        // $post = $command->queryAll();
+
+                        // $connection->close();
+
+                        return $this->render('searchresults',['model' => $model]);
                     }
                     else{
                         $random = rand(0,9999);
                         $model->filepath = 'uploads/' . $random . '.' . $model->file->extension;
                         $model->file->saveAs($model->filepath);
+
+                        return $this->render('searchresults',['model' => $model]);
                     }
-
-                    $model->type = $_POST['SearchForm']['type'];
-
-                    return $this->render('searchresults',['model' => $model,'result' => $post]);
-                //} 
         }
 
         return $this->render('index',['model' => $model]);

@@ -18,22 +18,59 @@ def imageSearch():
 	return result
 
 def pest(filename):
+	original_img = cv2.imread(filename)
 	img = cv2.imread(filename,0)
-	img = cv2.medianBlur(img,5)
+	os.remove(filename)
 
-	ret,th1 = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
-	th2 = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_MEAN_C,\
-	            cv2.THRESH_BINARY,11,2)
-	th3 = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
-	            cv2.THRESH_BINARY,11,2)
-
-	images = [img, th1, th2, th3]
-	#th1 = cv2.bitwise_not(th1,th1)
-	res = cv2.bitwise_and(img,img, mask= th1)
-	#os.remove(filename)
-	cv2.imwrite('../web/results/res.jpg',res)
+	# Otsu's thresholding after Gaussian filtering
+	blur = cv2.GaussianBlur(img,(5,5),0)
+	ret,th = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 	
-	return "<img src='results/res.jpg'>"
+	mask = cv2.bitwise_not(th)
+
+	kernel = np.ones((3,3),np.uint8)
+	mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+	
+	res = cv2.bitwise_and(img,mask)
+
+	locations = [\
+				'../web/results/original_img.jpg',\
+				'../web/results/greyscale.jpg',\
+				'../web/results/th.jpg',\
+				'../web/results/mask.jpg',\
+				'../web/results/res.jpg'\
+				]
+	images = [original_img, img, th, mask, res]
+	
+	titles = [\
+			'Original Image',\
+			'Grayscale',\
+			'Otsu\'s Thresholding',\
+			'Mask',\
+			'Result'\
+			]
+	#data is a json to be converted into html tags
+	data = {}
+	data['data'] = []
+	data['data'].append({'title':'Histogram','location':[]})
+	for i in xrange(len(images)):
+		cv2.imwrite(locations[i],images[i])
+		data['data'].append({'title': titles[i],'location':[locations[i]]})
+	
+	
+	
+	html = jsontohtml(data)
+	hist = cv2.calcHist([img],[0],None,[256],[0,256])
+
+	histdata = []
+	i=0
+	for pixel in hist:
+		histdata.append([i,int(pixel[0])])
+		i+=1
+
+	val = {'histogram':histdata,'html':html}
+	
+	return json.dumps(val)
 
 def diseases(filename):
 	
